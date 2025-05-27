@@ -17,5 +17,9 @@ private fun MoviePosterPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun MoviesListScreenPreview() {
-    MoviesListScreen()
+    MoviesListScreen(
+        popularMovies = listOf(
+            movie1,
+        )
+    )
 }

@@ -58,6 +58,9 @@ kotlin {
             implementation(libs.ktor.client.logging)
 
             implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.okhttp)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
