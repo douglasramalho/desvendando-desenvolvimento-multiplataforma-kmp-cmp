@@ -9,6 +9,7 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Star
 import org.example.project.domain.model.MovieSection
 import org.example.project.domain.model.movie1
+import org.example.project.ui.components.CastMemberItem
 import org.example.project.ui.components.MovieGenreChip
 import org.example.project.ui.components.MovieInfoItem
 import org.example.project.ui.components.MoviePoster
@@ -69,6 +70,18 @@ private fun MovieGenreChipPreview() {
     MoviesAppTheme {
         MovieGenreChip(
             genre = "Action"
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CastMemberItemPreview() {
+    MoviesAppTheme {
+        CastMemberItem(
+            profilePictureUrl = "url",
+            name = "Will Smith",
+            character = "John Smith",
         )
     }
 }
