@@ -10,6 +10,7 @@ import org.example.project.di.networkModule
 import org.example.project.di.viewModelModule
 import org.example.project.navigation.AppRoutes
 import org.example.project.ui.movies.MoviesListRoute
+import org.example.project.ui.theme.MoviesAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 
@@ -21,7 +22,7 @@ fun App() {
             modules(networkModule, dataModule, viewModelModule)
         }
     ) {
-        MaterialTheme {
+        MoviesAppTheme {
             val navController = rememberNavController()
             NavHost(navController, startDestination = AppRoutes.MoviesList) {
                 composable<AppRoutes.MoviesList> {
