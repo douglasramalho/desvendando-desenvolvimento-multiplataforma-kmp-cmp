@@ -9,6 +9,7 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Star
 import org.example.project.domain.model.MovieSection
 import org.example.project.domain.model.movie1
+import org.example.project.ui.components.MovieGenreChip
 import org.example.project.ui.components.MovieInfoItem
 import org.example.project.ui.components.MoviePoster
 import org.example.project.ui.moviedetail.MovieDetailScreen
@@ -58,6 +59,16 @@ private fun MovieInfoItemPreview() {
         MovieInfoItem(
             icon = FontAwesomeIcons.Solid.Star,
             text = "8.5"
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MovieGenreChipPreview() {
+    MoviesAppTheme {
+        MovieGenreChip(
+            genre = "Action"
         )
     }
 }
