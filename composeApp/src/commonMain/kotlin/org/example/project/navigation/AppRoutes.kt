@@ -7,5 +7,5 @@ sealed interface AppRoutes {
     data object MoviesList : AppRoutes
 
     @Serializable
-    data class MovieDetails(val id: Int) : AppRoutes
+    data class MovieDetail(val id: Int) : AppRoutes
 }

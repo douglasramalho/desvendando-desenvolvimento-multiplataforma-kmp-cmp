@@ -1,7 +1,5 @@
 package org.example.project.previews
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import compose.icons.FontAwesomeIcons
@@ -22,25 +20,29 @@ import org.example.project.ui.theme.MoviesAppTheme
 @Composable
 private fun MoviePosterPreview() {
     MoviePoster(
-        movie = movie1
+        movie = movie1,
+        onMoviePosterClick = {},
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun MoviesListScreenPreview() {
-    MoviesListScreen(
-        moviesListState = MoviesListViewModel.MoviesListState.Success(
-            movieSections = listOf(
-                MovieSection(
-                    sectionType = MovieSection.SectionType.POPULAR,
-                    movies = listOf(
-                        movie1,
+    MoviesAppTheme {
+        MoviesListScreen(
+            moviesListState = MoviesListViewModel.MoviesListState.Success(
+                movieSections = listOf(
+                    MovieSection(
+                        sectionType = MovieSection.SectionType.POPULAR,
+                        movies = listOf(
+                            movie1,
+                        ),
                     )
                 )
-            )
+            ),
+            onMovieClick = {},
         )
-    )
+    }
 }
 
 @Preview(showBackground = true)

@@ -17,6 +17,7 @@ import org.example.project.domain.model.Movie
 fun MoviesSection(
     title: String,
     movies: List<Movie>,
+    onMoviePosterClick: (movieId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -38,6 +39,9 @@ fun MoviesSection(
             items(movies) { movie ->
                 MoviePoster(
                     movie = movie,
+                    onMoviePosterClick = {
+                        onMoviePosterClick(movie.id)
+                    },
                 )
             }
         }

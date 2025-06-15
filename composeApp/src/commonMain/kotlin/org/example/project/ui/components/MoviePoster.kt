@@ -1,8 +1,7 @@
 package org.example.project.ui.components
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -16,18 +15,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import movies.composeapp.generated.resources.Res
-import movies.composeapp.generated.resources.minecraft_movie
 import org.example.project.domain.model.Movie
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MoviePoster(
     movie: Movie,
+    onMoviePosterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
+            .clickable {
+                onMoviePosterClick()
+            }
             .width(140.dp)
     ) {
         Card(
