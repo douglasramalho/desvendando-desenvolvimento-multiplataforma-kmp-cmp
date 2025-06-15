@@ -2,4 +2,7 @@
     <string name="movies_list_popular_movies">Popular Movies</string>
     <string name="movies_list_top_rated_movies">Top Rated Movies</string>
     <string name="movies_list_upcoming_movies">Upcoming Movies</string>
+
+    <string name="movie_detail_title">Movie detail</string>
+    <string name="movie_detail_watch_trailer">Watch trailer</string>
 </resources>

@@ -1,6 +1,5 @@
 package org.example.project.ui.moviedetail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -15,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
@@ -31,12 +33,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ArrowLeft
@@ -45,23 +47,25 @@ import compose.icons.fontawesomeicons.solid.Clock
 import compose.icons.fontawesomeicons.solid.Play
 import compose.icons.fontawesomeicons.solid.Star
 import movies.composeapp.generated.resources.Res
-import movies.composeapp.generated.resources.minecraft_movie
+import movies.composeapp.generated.resources.movie_detail_title
+import movies.composeapp.generated.resources.movie_detail_watch_trailer
 import org.example.project.domain.model.Movie
-import org.example.project.domain.model.movie1
 import org.example.project.ui.components.CastMemberItem
 import org.example.project.ui.components.MovieGenreChip
 import org.example.project.ui.components.MovieInfoItem
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MovieDetailRoute(
-    viewModel: MovieDetailViewModel = koinViewModel()
+    viewModel: MovieDetailViewModel = koinViewModel(),
+    navigateBack: () -> Unit,
 ) {
     val movieDetailState by viewModel.movieDetailState.collectAsStateWithLifecycle()
 
     MovieDetailScreen(
         movieDetailState = movieDetailState,
+        onNavigationIconClick = navigateBack,
     )
 }
 
@@ -69,13 +73,14 @@ fun MovieDetailRoute(
 @Composable
 fun MovieDetailScreen(
     movieDetailState: MovieDetailViewModel.MovieDetailState,
+    onNavigationIconClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Movie detail"
+                        text = stringResource(Res.string.movie_detail_title)
                     )
                 },
                 navigationIcon = {
@@ -85,9 +90,7 @@ fun MovieDetailScreen(
                         shape = MaterialTheme.shapes.small
                     ) {
                         IconButton(
-                            onClick = {
-
-                            },
+                            onClick = onNavigationIconClick,
                             modifier = Modifier
                                 .size(32.dp)
                         ) {
@@ -140,9 +143,11 @@ fun MovieDetailContent(
     modifier: Modifier = Modifier,
     movie: Movie,
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
         Surface(
             modifier = Modifier
@@ -151,8 +156,8 @@ fun MovieDetailContent(
                 .weight(1f),
             shape = MaterialTheme.shapes.large,
         ) {
-            Image(
-                painter = painterResource(Res.drawable.minecraft_movie),
+            AsyncImage(
+                model = movie.posterUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large),
@@ -184,21 +189,23 @@ fun MovieDetailContent(
             ) {
                 MovieInfoItem(
                     icon = FontAwesomeIcons.Solid.Star,
-                    text = "7.5"
+                    text = movie.rating
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                MovieInfoItem(
-                    icon = FontAwesomeIcons.Solid.Clock,
-                    text = "2h 36min"
-                )
+                movie.duration?.let { duration ->
+                    MovieInfoItem(
+                        icon = FontAwesomeIcons.Solid.Clock,
+                        text = duration,
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
                 MovieInfoItem(
                     icon = FontAwesomeIcons.Solid.Calendar,
-                    text = "2022"
+                    text = "${movie.year}"
                 )
             }
 
@@ -207,9 +214,15 @@ fun MovieDetailContent(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                MovieGenreChip(
-                    genre = "Action"
-                )
+                movie.genres?.forEachIndexed { index, genre ->
+                    MovieGenreChip(
+                        genre = genre.name
+                    )
+
+                    if (index < movie.genres.size - 1) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -230,7 +243,7 @@ fun MovieDetailContent(
                 )
 
                 Text(
-                    text = "Watch trailer",
+                    text = stringResource(Res.string.movie_detail_watch_trailer),
                     modifier = Modifier
                         .padding(start = 16.dp),
                     fontWeight = FontWeight.Medium,
@@ -238,33 +251,36 @@ fun MovieDetailContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            movie.castMembers?.let { castMembers ->
+                Spacer(modifier = Modifier.height(16.dp))
 
-            BoxWithConstraints {
-                val itemWidth = this.maxWidth * 0.55f
+                BoxWithConstraints {
+                    val itemWidth = this.maxWidth * 0.55f
 
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(10) {
-                        CastMemberItem(
-                            profilePictureUrl = "",
-                            name = "Will Smith",
-                            character = "John Smith",
-                            modifier = Modifier
-                                .width(itemWidth)
-                        )
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(castMembers) { castMember ->
+                            CastMemberItem(
+                                profilePictureUrl = castMember.profileUrl,
+                                name = castMember.name,
+                                character = castMember.character,
+                                modifier = Modifier
+                                    .width(itemWidth)
+                            )
+                        }
                     }
                 }
             }
 
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Trying to leave their troubled lives behind, twin brothers return to their hometown to start again, only to discover that an even greater evil is waiting to welcome them back.",
+                    text = movie.overview,
                     style = MaterialTheme.typography.bodySmall,
                 )
             }

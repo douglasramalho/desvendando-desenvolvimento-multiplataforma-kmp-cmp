@@ -1,8 +1,5 @@
 package org.example.project.domain.model
 
-import org.example.project.data.network.IMAGE_SMALL_BASE_URL
-import org.example.project.data.network.model.MovieResponse
-
 data class Movie(
     val id: Int,
     val title: String,
