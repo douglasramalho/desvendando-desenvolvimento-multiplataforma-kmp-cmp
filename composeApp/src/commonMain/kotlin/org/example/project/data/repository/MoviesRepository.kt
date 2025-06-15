@@ -5,9 +5,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import org.example.project.data.mapper.toModel
 import org.example.project.data.network.KtorClient
+import org.example.project.domain.model.Movie
 import org.example.project.domain.model.MovieSection
-import org.example.project.domain.model.toModel
 
 class MoviesRepository(
     private val ktorClient: KtorClient,
@@ -44,6 +45,20 @@ class MoviesRepository(
                     }
                 )
             )
+        }
+    }
+
+    suspend fun getMovieDetail(movieId: Int): Result<Movie> {
+        return withContext(ioDispatcher) {
+            runCatching {
+                val movieDetailDeferred = async { ktorClient.getMovieDetail(movieId) }
+                val creditsDeferred = async { ktorClient.getCredits(movieId) }
+
+                val movieDetailResponse = movieDetailDeferred.await()
+                val creditsResponse = creditsDeferred.await()
+
+                movieDetailResponse.toModel(creditsResponse.cast)
+            }
         }
     }
 }

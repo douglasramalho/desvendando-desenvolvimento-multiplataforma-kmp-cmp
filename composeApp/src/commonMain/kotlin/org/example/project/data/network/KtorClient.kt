@@ -16,6 +16,8 @@ import io.ktor.client.request.parameter
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.example.project.data.network.model.CreditsListResponse
+import org.example.project.data.network.model.MovieResponse
 import org.example.project.data.network.model.MoviesListResponse
 
 private const val BASE_URL = "https://api.themoviedb.org"
@@ -58,13 +60,13 @@ class KtorClient {
         }.body()
     }
 
-    suspend fun getMovieDetail(movieId: Int): MoviesListResponse {
+    suspend fun getMovieDetail(movieId: Int): MovieResponse {
         return client.get("$BASE_URL/3/movie/$movieId") {
             addLanguageParam()
         }.body()
     }
 
-    suspend fun getCredits(movieId: Int): MoviesListResponse {
+    suspend fun getCredits(movieId: Int): CreditsListResponse {
         return client.get("$BASE_URL/3/movie/$movieId/credits") {
             addLanguageParam()
         }.body()
