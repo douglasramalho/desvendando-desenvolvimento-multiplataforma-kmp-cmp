@@ -12,6 +12,7 @@ import org.example.project.ui.components.MovieGenreChip
 import org.example.project.ui.components.MovieInfoItem
 import org.example.project.ui.components.MoviePoster
 import org.example.project.ui.moviedetail.MovieDetailScreen
+import org.example.project.ui.moviedetail.MovieDetailViewModel
 import org.example.project.ui.movies.MoviesListScreen
 import org.example.project.ui.movies.MoviesListViewModel
 import org.example.project.ui.theme.MoviesAppTheme
@@ -50,7 +51,7 @@ private fun MoviesListScreenPreview() {
 private fun MovieDetailScreenPreview() {
     MoviesAppTheme {
         MovieDetailScreen(
-            movie = movie1,
+            movieDetailState = MovieDetailViewModel.MovieDetailState.Success(movie1),
         )
     }
 }
