@@ -10,6 +10,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.http.HttpHeaders
@@ -51,9 +52,25 @@ class KtorClient {
         }
     }
 
-    suspend fun getMovies(category: String, language: String = "pt-BR"): MoviesListResponse {
+    suspend fun getMovies(category: String): MoviesListResponse {
         return client.get("$BASE_URL/3/movie/$category") {
-            parameter("language", language)
+            addLanguageParam()
         }.body()
+    }
+
+    suspend fun getMovieDetail(movieId: Int): MoviesListResponse {
+        return client.get("$BASE_URL/3/movie/$movieId") {
+            addLanguageParam()
+        }.body()
+    }
+
+    suspend fun getCredits(movieId: Int): MoviesListResponse {
+        return client.get("$BASE_URL/3/movie/$movieId/credits") {
+            addLanguageParam()
+        }.body()
+    }
+
+    private fun HttpRequestBuilder.addLanguageParam(language: String = "pt-BR") {
+        parameter("language", language)
     }
 }
