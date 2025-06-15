@@ -29,7 +29,7 @@ fun CastMemberItem(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .height(76.dp),
         shape = MaterialTheme.shapes.medium,
     ) {
